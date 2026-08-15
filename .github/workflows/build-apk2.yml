@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -25,16 +25,36 @@ jobs:
           distribution: temurin
           java-version: "21"
 
-      - name: Setup Android
-        uses: android-actions/setup-android@v3
-
       - name: Install dependencies
         run: npm install
 
-      - name: Add Android
+      - name: Prepare web assets
+        run: |
+          mkdir -p www
+          cp index.html www/index.html
+          if [ -d css ]; then cp -r css www/; fi
+          if [ -d js ]; then cp -r js www/; fi
+          if [ -d assets ]; then cp -r assets www/; fi
+          if [ -d images ]; then cp -r images www/; fi
+          if [ -d img ]; then cp -r img www/; fi
+
+      - name: Add Android platform
         run: npx cap add android
 
-      - name: Sync Android
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Build APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlTayyibat-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk      - name: Sync Android
         run: npx cap sync android
 
       - name: Build APK
