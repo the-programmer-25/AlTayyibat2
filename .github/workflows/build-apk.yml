@@ -21,13 +21,9 @@ jobs:
 
       - run: npm install
 
-      - run: mkdir -p www
+      - run: rm -rf www
 
-      - run: cp ui2026/index.html www/index.html
-
-      - run: cp ui2026/style.css www/style.css
-
-      - run: cp ui2026/app.js www/app.js
+      - run: cp -r ui2026 www
 
       - run: npx cap add android
 
