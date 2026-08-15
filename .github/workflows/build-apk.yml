@@ -1,4 +1,4 @@
-name: Build AlTayyibat APK
+name: Build AlTayyibat 2026 APK
 
 on:
   push:
@@ -14,27 +14,45 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Java
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: "21"
 
-      - name: Install
+      - name: Install dependencies
         run: npm install
 
-      - name: Prepare www
-        run: mkdir -p www && cp index.html www/index.html
+      - name: Prepare AlTayyibat 2026
+        run: |
+          rm -rf www
+          mkdir -p www
+          cp ui2026/index.html www/index.html
+          cp ui2026/style.css www/style.css
+          cp ui2026/app.js www/app.js
 
       - name: Add Android
         run: npx cap add android
 
-      - name: Sync
+      - name: Sync Android
+        run: npx cap sync android
+
+      - name: Build APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlTayyibat-2026-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk      - name: Sync
         run: npx cap sync android
 
       - name: Build
