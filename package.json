@@ -1,0 +1,16 @@
+{
+  "name": "altayyibat-app",
+  "version": "1.0.0",
+  "description": "\u062a\u0637\u0628\u064a\u0642 \u0627\u0644\u0637\u064a\u0628\u0627\u062a - Diet, weight and workout tracker",
+  "scripts": {
+    "build": "echo Capacitor project ready",
+    "android": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.4.0",
+    "@capacitor/android": "^7.4.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.0"
+  }
+}

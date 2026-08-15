@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#198f2b">
+<link rel="manifest" href="manifest.webmanifest">
+<title>الطيبات</title>
+<style>
+:root{--g:#198f2b;--g2:#0e6e1e;--bg:#f6faf6;--card:#fff;--txt:#172018;--muted:#68736a;--red:#c62828}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Tahoma,sans-serif;color:var(--txt)}
+header{background:linear-gradient(135deg,var(--g2),var(--g));color:#fff;padding:18px 16px 22px;border-radius:0 0 24px 24px;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:48px;height:48px;object-fit:contain;border-radius:12px}.brand h1{margin:0;font-size:26px}.brand small{opacity:.9}
+nav{display:flex;gap:7px;overflow:auto;margin-top:16px;padding-bottom:2px}nav button,.filter button{border:0;background:#fff;color:var(--g2);border-radius:20px;padding:9px 13px;font-weight:700;white-space:nowrap}
+nav button.active,.filter button.active{background:#bff0c6;color:#0a5415}
+main{max-width:760px;margin:auto;padding:14px}
+.card{background:var(--card);border-radius:20px;padding:16px;margin:12px 0;box-shadow:0 4px 18px #164d1712}
+.hero{background:linear-gradient(135deg,#e9f9eb,#fff);border:1px solid #d3efd6}.hero h2{margin:0 0 5px;color:var(--g2)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#f4fbf4;border-radius:16px;padding:12px;text-align:center}.stat b{display:block;font-size:23px;color:var(--g2)}
+input,select{width:100%;padding:13px;border:1px solid #d8e2d9;border-radius:13px;background:#fff;font-size:16px}
+.btn{border:0;border-radius:14px;padding:13px 16px;background:var(--g);color:#fff;font-weight:700;width:100%;margin-top:8px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.food{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #edf1ed}.ok{color:var(--g2);font-weight:700}.no{color:var(--red);font-weight:700}
+video{width:100%;border-radius:16px;background:#111}.video-placeholder{padding:28px;text-align:center;background:#eaf6eb;border-radius:16px;color:var(--g2)}
+footer{text-align:center;color:var(--muted);padding:30px 10px;font-size:13px}
+.hidden{display:none}.bar{height:12px;background:#e6eee6;border-radius:20px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g);border-radius:20px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><img class="logo" src="icon-192.png" alt="الطيبات"><div><h1>الطيبات</h1><small>رحلتك نحو حياة صحية</small></div></div>
+  <nav>
+    <button class="active" onclick="show('home',this)">الرئيسية</button>
+    <button onclick="show('diet',this)">النظام الغذائي</button>
+    <button onclick="show('workout',this)">التمارين</button>
+    <button onclick="show('progress',this)">التقدم</button>
+    <button onclick="show('more',this)">المزيد</button>
+  </nav>
+</header>
+
+<main>
+<section id="home">
+ <div class="card hero"><h2>مرحباً بك 👋</h2><p>ابدأ رحلتك الصحية وسجّل وزنك ونشاطك يومياً.</p><div class="grid">
+  <div class="stat">الوزن الحالي<b id="homeWeight">78</b>كجم</div>
+  <div class="stat">الهدف<b id="homeGoal">70</b>كجم</div>
+  <div class="stat">الماء<b id="homeWater">0/8</b>أكواب</div>
+  <div class="stat">النشاط<b id="homeMin">0</b>دقيقة</div>
+ </div></div>
+ <div class="card"><h3>تقدمك نحو الهدف</h3><div class="bar"><i id="progressBar" style="width:50%"></i></div><p id="progressText"></p><button class="btn" onclick="showByName('progress')">سجل وزنك اليوم</button></div>
+ <div class="card"><h3>لماذا تطبيق الطيبات؟</h3><p>نظام غذائي، متابعة الوزن، برنامج رياضي، تذكيرات وأدوات بسيطة في تطبيق خفيف.</p></div>
+</section>
+
+<section id="diet" class="hidden">
+ <div class="card"><h2>نظام الطيبات</h2><p>القوائم التالية معروضة كمرجع للنظام المنسوب للدكتور ضياء العوضي، وليست بديلاً عن تقييم طبي أو تغذوي.</p>
+ <input id="foodSearch" placeholder="ابحث عن طعام..." oninput="renderFoods()"></div>
+ <div class="card"><h3 class="ok">المسموحات</h3><div id="allowed"></div></div>
+ <div class="card"><h3 class="no">الممنوعات</h3><div id="forbidden"></div></div>
+ <div class="card"><h3>مثال يوم غذائي</h3><div id="dayPlan"></div></div>
+</section>
+
+<section id="workout" class="hidden">
+ <div class="card"><h2>البرنامج الرياضي</h2><p>ابدأ تدريجياً واختر مستوى يناسبك. أوقف التمرين عند الألم أو الدوخة.</p>
+ <div class="filter"><button class="active" onclick="filterWorkout('all',this)">الكل</button><button onclick="filterWorkout('cardio',this)">كارديو</button><button onclick="filterWorkout('strength',this)">قوة</button><button onclick="filterWorkout('beginner',this)">مبتدئ</button></div></div>
+ <div id="workouts"></div>
+ <div class="card"><h3>فيديوهات تعليمية</h3><p>يمكن فتح فيديوهات تعليمية من YouTube عند توفر الإنترنت.</p><button class="btn" onclick="openYT()">فتح البحث عن تمارين للمبتدئين</button></div>
+</section>
+
+<section id="progress" class="hidden">
+ <div class="card"><h2>متابعة الوزن</h2><label>الوزن الحالي (كجم)</label><input id="weightInput" type="number" step="0.1" min="1"><label>الهدف (كجم)</label><input id="goalInput" type="number" step="0.1" min="1"><button class="btn" onclick="saveWeight()">حفظ</button></div>
+ <div class="card"><h3>سجل القياسات</h3><div id="history"></div></div>
+ <div class="card"><h3>الماء</h3><p>اضغط بعد كل كوب ماء:</p><button class="btn" onclick="addWater()">💧 إضافة كوب</button><button class="btn" style="background:#eaf5eb;color:#126d1f" onclick="resetWater()">تصفير اليوم</button></div>
+ <div class="card"><h3>دقائق الرياضة</h3><input id="minutesInput" type="number" min="1" placeholder="مثلاً 30"><button class="btn" onclick="addMinutes()">إضافة النشاط</button></div>
+</section>
+
+<section id="more" class="hidden">
+ <div class="card"><h2>المزيد</h2><div class="food">تذكيرات يومية <span>🔔</span></div><div class="food">الوضع الليلي <button onclick="toggleDark()">تبديل</button></div><div class="food">اللغة <span>العربية</span></div><div class="food">يعمل محلياً <span>✓</span></div></div>
+ <div class="card"><h3>عن النظام</h3><p>هذا التطبيق التعليمي مستقل عن أي جهة رسمية، وتم تصميمه ليكون خفيفاً ويعمل على أجهزة Android محدودة الذاكرة.</p></div>
+</section>
+</main>
+<footer>الطيبات 🍏 — تطبيق صحي تعليمي</footer>
+
+<script>
+const foods={
+allowed:["النشويات الأساسية","التوست","الأرز","البطاطا","الشعيرية ولسان العصفور","البطاطا الحلوة","القرع","الشمّام","الدهون الصحية","السمنة","الزبدة","زيت الزيتون","الجبن المطبوخ","الفواكه والعصائر","الخضار","السكريات والحلويات المسموحة","المكسرات والبذور","البروتينات"],
+forbidden:["المخبوزات والحلويات","المعجنات والمكرونات","المشروبات الغازية","الألبان ومشتقاتها","البيض","بعض الخضار","البقوليات والورقيات","بعض الفواكه","القشور والبذور حسب القائمة","البروتينات الممنوعة"]
+};
+const workouts=[
+["كارديو لحرق الدهون","30 دقيقة","cardio"],["مشي سريع","25 دقيقة","cardio"],["تمارين HIIT","20 دقيقة","cardio"],["تمارين البطن","15 دقيقة","beginner"],["تمارين مقاومة","20 دقيقة","strength"],["تمارين قوة للمبتدئين","25 دقيقة","strength"]
+];
+function get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}}
+function set(k,v){localStorage.setItem(k,JSON.stringify(v))}
+let state=get("state",{weight:78,goal:70,water:0,minutes:0,history:[]});
+function show(id,btn){document.querySelectorAll("main>section").forEach(x=>x.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");render()}
+function showByName(id){show(id);window.scrollTo({top:0,behavior:"smooth"})}
+function render(){
+document.getElementById("homeWeight").textContent=state.weight;document.getElementById("homeGoal").textContent=state.goal;
+document.getElementById("homeWater").textContent=state.water+"/8";document.getElementById("homeMin").textContent=state.minutes;
+let pct=Math.max(0,Math.min(100,((state.weight-state.goal)/(78-state.goal))*100));document.getElementById("progressBar").style.width=pct+"%";document.getElementById("progressText").textContent=`الوزن: ${state.weight} كجم — الهدف: ${state.goal} كجم`;
+document.getElementById("weightInput").value=state.weight;document.getElementById("goalInput").value=state.goal;
+document.getElementById("history").innerHTML=state.history.length?state.history.map(x=>`<div class="food"><span>${x.date}</span><b>${x.weight} كجم</b></div>`).join(""):"لا توجد قياسات بعد.";
+renderFoods();renderWorkouts("all");
+}
+function renderFoods(){
+let q=(document.getElementById("foodSearch")?.value||"").trim();let f=a=>a.filter(x=>x.includes(q));
+document.getElementById("allowed").innerHTML=f(foods.allowed).map(x=>`<div class="food"><span>${x}</span><span class="ok">✓</span></div>`).join("");
+document.getElementById("forbidden").innerHTML=f(foods.forbidden).map(x=>`<div class="food"><span>${x}</span><span class="no">✕</span></div>`).join("");
+document.getElementById("dayPlan").innerHTML=["الإفطار: شوفان بالحليب والمكسرات + فاكهة","وجبة خفيفة: تفاحة + لوز","الغداء: دجاج مشوي + سلطة خضراء + شوربة","وجبة خفيفة: زبادي مع بذور الشيا","العشاء: شوربة خضار + سلطة"].map(x=>`<div class="food">${x}</div>`).join("");
+}
+function renderWorkouts(filter){
+document.getElementById("workouts").innerHTML=workouts.filter(w=>filter==="all"||w[2]===filter).map(w=>`<div class="card"><div class="row"><div><h3>${w[0]}</h3><p>${w[1]} • ${w[2]}</p></div><button onclick="openYT('${encodeURIComponent(w[0])}')">▶ فيديو</button></div></div>`).join("");
+}
+function filterWorkout(f,b){document.querySelectorAll(".filter button").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderWorkouts(f)}
+function saveWeight(){let w=parseFloat(weightInput.value),g=parseFloat(goalInput.value);if(!w||!g)return alert("أدخل الوزن والهدف");state.weight=w;state.goal=g;state.history.unshift({date:new Date().toLocaleDateString("ar-IQ"),weight:w});state.history=state.history.slice(0,30);set("state",state);render();alert("تم الحفظ")}
+function addWater(){state.water=Math.min(8,state.water+1);set("state",state);render()}
+function resetWater(){state.water=0;set("state",state);render()}
+function addMinutes(){let m=parseInt(minutesInput.value);if(!m)return;state.minutes+=m;set("state",state);minutesInput.value="";render();alert("تمت إضافة النشاط")}
+function openYT(q="تمارين رياضية للمبتدئين"){location.href="https://www.youtube.com/results?search_query="+q}
+function toggleDark(){document.body.style.background=document.body.style.background==="rgb(17, 17, 17)"?"#f6faf6":"#111";document.body.style.color=document.body.style.color==="white"?"#172018":"white"}
+render();
+</script>
+</body></html>

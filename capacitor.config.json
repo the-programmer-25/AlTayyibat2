@@ -1,0 +1,8 @@
+{
+  "appId": "com.altayyibat.app",
+  "appName": "الطيبات",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
